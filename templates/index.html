@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TheroBot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+      body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(to bottom, #75b3e6, #042de1); 
+            background-attachment: fixed; 
+                 
+      }
+      #chatbox {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        margin-top: 60px;
+      }
+      #userInput {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        margin-top: 60px;
+      }
+      #textInput {
+        width: 90%;
+        border: none;
+        border-bottom: 3px solid black;
+        font-family: monospace;
+        font-size: 17px;
+      }
+      .userText {
+        color: white;
+        font-family: monospace;
+        font-size: 17px;
+        text-align: right;
+        line-height: 30px;
+      }
+      .userText span {
+        padding: 10px;
+        border-radius: 2px;
+      }
+      .botText {
+        color: white;
+        font-family: monospace;
+        font-size: 17px;
+        text-align: left;
+        line-height: 30px;
+      }
+      .botText span {
+        
+        padding: 10px;
+        border-radius: 2px;
+      }
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        border: 7px solid rgb(202, 200, 200);
+        border-radius: 25px;
+        width: 80%;
+        margin-top: 40px;
+        
+      }
+      h1{
+        color: white;
+      }
+      h4{
+        color: white;
+      }
+      img{
+        align = center
+      }
+    </style>
+</head>
+<body>
+<div>
+        <h1 align="center"><b>TheroBot</b></h1>
+        <img src="{{url_for('static', filename='image.png')}}"  />
+        <div class="container">
+            <div>
+                <div id="chatbox">
+                    <p class="botText">
+                        <span>Hello I am TheraBot</span>
+                    </p>
+                </div>
+                <div id="userInput">
+                    <input id="textInput" type="text" name="msg" placeholder="Message" />
+                </div>
+            </div>
+            <script>
+              function appendText(loca, info){
+                var msgHtml = '<p class="' + loca + 'Text"><span>' + info + "</span></p>";
+                $("#chatbox").append(msgHtml);
+                    document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
+              }
+                function getBotResponse() {
+                    var rawText = $("#textInput").val();
+                    appendText("user", rawText)
+                    $("#textInput").val("");
+                    
+                    $.get("/get", { msg: rawText }, function(data) {
+                        appendText("bot", data); 
+                    });
+                }
+                $("#textInput").keypress(function (e) {
+                    if (e.which == 13) {
+                        getBotResponse();
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>

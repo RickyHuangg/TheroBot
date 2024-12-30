@@ -35,7 +35,7 @@ with open('labels.pickle', 'rb') as f:
     labels = pickle.load(f)
 
 
-model=load_model('chatModelV2.h5')
+model=load_model('chatModel.h5')
 
 def process_audio():
     try:

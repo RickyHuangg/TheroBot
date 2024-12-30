@@ -159,7 +159,6 @@
 
                 function speech_to_text(){
                   $.get("/tts", function(data){
-                    alert("test")
                     $("#textInput").val(data);
                   })
                 }

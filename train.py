@@ -95,5 +95,5 @@ model.compile(optimizer=SGD(learning_rate=lr_schedule), loss='categorical_crosse
 
 
 model.fit(np.array(train_x), np.array(train_y), epochs=300, batch_size=5, verbose=1)
-model.save('chatModel.h5')
+model.save('chatModelV2.h5')
 

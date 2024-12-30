@@ -1,4 +1,5 @@
-import flask
+
+from flask import jsonify
 import pickle
 from keras.models import load_model
 import nltk
@@ -11,6 +12,17 @@ import json
 import pickle
 import numpy as np
 import random
+import pyaudio
+from vosk import Model, KaldiRecognizer
+
+FORMAT = pyaudio.paInt16
+CHANNEL = 1
+RATE = 8192
+CHUNK = 1024
+output_file = "recorded.wav"
+
+model = Model(r"C:\Users\Rhrua\Downloads\New folder\vosk-model-small-en-us-0.15") # 
+recog = KaldiRecognizer(model,16000)
 
 
 with open('Dataset\intent.json') as file:
@@ -23,7 +35,24 @@ with open('labels.pickle', 'rb') as f:
     labels = pickle.load(f)
 
 
-model=load_model('chatModel.h5')
+model=load_model('chatModelV2.h5')
+
+def process_audio():
+    try:
+      audio = pyaudio.PyAudio()
+      stream = audio.open(rate = 16000 ,channels = CHANNEL, format = FORMAT, frames_per_buffer=CHUNK,input = True ) 
+      stream.start_stream()  
+      while True:
+          data = stream.read(4096)  
+          if recog.AcceptWaveform(data):  
+              text = recog.Result()
+              text = json.loads(text) 
+              return text['text']  
+
+    finally:
+      stream.stop_stream()
+      stream.close()
+      audio.terminate()
 
 def get_input (inp):
    inpSpl = word_tokenize(inp)
@@ -63,6 +92,9 @@ def get_bot_response():
     response_index = predict_ans(userText)  
     response = get_response(response_index)
     return response
-
+@app.route("/tts")
+def speech_input():
+    text = process_audio()  
+    return text 
 if __name__ == "__main__":
   app.run()   

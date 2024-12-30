@@ -14,9 +14,16 @@
             margin: 0;
             font-family: Arial;
             background: linear-gradient(to bottom, #75b3e6, #042de1); 
-            background-attachment: fixed; 
-                 
+            background-attachment: fixed;       
       }
+      h1{
+        color: white;
+      }
+      h4{
+        color: white;
+      }
+      #btn-recorder
+
       #chatbox {
         margin-left: auto;
         margin-right: auto;
@@ -28,6 +35,7 @@
         margin-right: auto;
         width: 40%;
         margin-top: 60px;
+        text-align: center;
       }
       #textInput {
         width: 90%;
@@ -68,11 +76,47 @@
         margin-top: 40px;
         
       }
-      h1{
-        color: white;
+      #botImg{
+        display: block; 
+        margin: 0 auto; 
+        max-width: 10%; 
+        height: auto;
+        margin-top: 20px; 
+        margin-bottom: 20px; 
+        border-radius: 10px; 
       }
-      h4{
-        color: white;
+      
+      #btn-recorder{
+        
+        align-items: center;
+        appearance: none;
+        background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+        border: 0;
+        border-radius: 6px;
+        box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        font-family: "JetBrains Mono",monospace;
+        height: 38px;
+        justify-content: center;
+        line-height: 1;
+        list-style: none;
+        overflow: hidden;
+        padding-left: 12px;
+        padding-right: 12px;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+        will-change: box-shadow,transform;
+        font-size: 16px;
+        margin-bottom: 20px;
+        margin: 0 auto;
       }
       
     </style>
@@ -80,19 +124,24 @@
 <body>
 <div>
         <h1 align="center"><b>TheroBot</b></h1>
-        <img src="{{url_for('static', filename='image.png')}}"  />
+        <img id="botImg" src="{{url_for('static', filename='image.png')}}"  />
         <div class="container">
             <div>
                 <div id="chatbox">
                     <p class="botText">
                         <span>Hello I am TheraBot</span>
-                    </p>
+                    </p>   
                 </div>
+                
                 <div id="userInput">
                     <input id="textInput" type="text" name="msg" placeholder="Message" />
+                    <button id="btn-recorder">Record</button>
                 </div>
+                
             </div>
             <script>
+              
+
               function appendText(loca, info){
                 var msgHtml = '<p class="' + loca + 'Text"><span>' + info + "</span></p>";
                 $("#chatbox").append(msgHtml);
@@ -107,11 +156,23 @@
                         appendText("bot", data); 
                     });
                 }
+
+                function speech_to_text(){
+                  $.get("/tts", function(data){
+                    alert("test")
+                    $("#textInput").val(data);
+                  })
+                }
+                
                 $("#textInput").keypress(function (e) {
                     if (e.which == 13) {
                         getBotResponse();
                     }
                 });
+
+                const element = document.getElementById("btn-recorder");
+                element.addEventListener("click", speech_to_text);
+                
             </script>
         </div>
     </div>
